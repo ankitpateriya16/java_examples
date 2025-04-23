@@ -17,21 +17,21 @@ pipeline {
         stage('Build with Maven') {
             steps {
                 echo '🔧 Building the Java application...'
-                sh 'mvn clean compile'
+                sh 'cd java_simple && mvn clean compile'
             }
         }
 
         stage('Run Tests') {
             steps {
                 echo '🧪 Running tests...'
-                sh 'mvn test'
+                sh 'cd java_simple && mvn test'
             }
         }
 
         stage('Package and Build Docker Image') {
             steps {
                 echo '🐳 Building Docker image...'
-                sh 'mvn package -DskipTests'
+                sh 'cd java_simple && mvn package -DskipTests'
                 sh "docker build -t ${DOCKER_IMAGE} ."
             }
         }
