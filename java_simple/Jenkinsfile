@@ -10,17 +10,10 @@ pipeline {
     environment {
         GIT_REPO = 'https://github.com/ankitpateriya16/hellodemo.git'
         DOCKER_IMAGE = 'pateriyaji/my-java-app'
-        APP_PORT = '8081'
+        APP_PORT = '8089'
     }
 
     stages {
-        stage('Clone Repository') {
-            steps {
-                echo '🔄 Cloning GitHub repository...'
-                git url: "${env.GIT_REPO}", branch: 'main'
-            }
-        }
-
         stage('Build with Maven') {
             steps {
                 echo '🔧 Building the Java application...'
