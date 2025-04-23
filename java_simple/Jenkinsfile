@@ -42,7 +42,7 @@ pipeline {
                 // Stop old container if running
                 sh 'cd java_simple && docker rm -f my-java-app || true'
                 // Run new one
-                sh "cd java_simple && docker run -d --name my-java-app -p ${APP_PORT}:${APP_PORT} ${DOCKER_IMAGE}"
+                sh "cd java_simple && docker run -d --name my-java-app -p ${APP_PORT}:1234 ${DOCKER_IMAGE}"
             }
         }
     }
