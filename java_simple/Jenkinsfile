@@ -1,4 +1,4 @@
-pipeline {
+  pipeline {
     agent any
 
     tools {
@@ -8,12 +8,20 @@ pipeline {
     timeout(time: 3, unit: 'MINUTES')  // Auto-abort after 15 min
     }
     environment {
-        GIT_REPO = 'https://github.com/ankitpateriya16/hellodemo.git'
-        DOCKER_IMAGE = 'pateriyaji/my-java-app'
+        GIT_REPO = 'https://github.com/ankitpateriya16/java_examples.git'
+        DOCKER_IMAGE = 'ankit9977/my-java-app'
+        IMAGE_TAG = "${BUILD_NUMBER}"
+        CONTAINER_NAME = 'my-java-app'
         APP_PORT = '8089'
     }
 
     stages {
+        stage('Clone Repository') {
+            steps {
+                echo '🔄 Cloning GitHub repository...'
+                git url: "${env.GIT_REPO}", branch: 'master'
+            }
+        }
         stage('Build with Maven') {
             steps {
                 echo '🔧 Building the Java application...'
@@ -32,19 +40,40 @@ pipeline {
             steps {
                 echo '🐳 Building Docker image...'
                 sh 'cd java_simple && mvn package -DskipTests'
-                sh "cd java_simple && docker build -t ${DOCKER_IMAGE} ."
+                sh "cd java_simple && docker build -t ${DOCKER_IMAGE}:$IMAGE_TAG ."
+            }
+        }
+        stage('Stop Old Container (if running)') {
+            steps {
+                sh '''
+                    if [ "$(docker ps -q -f name=$CONTAINER_NAME)" ]; then
+                        echo "Stopping old container..."
+                        docker stop $CONTAINER_NAME
+                        docker rm $CONTAINER_NAME
+                    fi
+                '''
             }
         }
 
         stage('Run Docker Container') {
             steps {
-                echo '🚀 Running Docker container...'
-                // Stop old container if running
-                sh 'cd java_simple && docker rm -f my-java-app || true'
-                // Run new one
-                sh "cd java_simple && docker run -d --name my-java-app -p ${APP_PORT}:${APP_PORT} ${DOCKER_IMAGE}"
+                sh "cd java_simple && docker run -d --name $CONTAINER_NAME -p ${APP_PORT}:1234 ${DOCKER_IMAGE}:$IMAGE_TAG"
             }
         }
+        stage('Login to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-id', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                }
+            }
+        }
+
+        stage('Push Image') {
+            steps {
+                sh "cd java_dropwizard && docker push ${DOCKER_IMAGE}:$IMAGE_TAG"
+            }
+        }
+
     }
 
     post {
