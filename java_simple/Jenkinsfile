@@ -9,7 +9,7 @@
     }
     environment {
         GIT_REPO = 'https://github.com/ankitpateriya16/java_examples.git'
-        DOCKER_IMAGE = 'ankit9977/my-java-app'
+        DOCKER_IMAGE = 'pateriyaji927/my-java-app'
         IMAGE_TAG = "${BUILD_NUMBER}"
         CONTAINER_NAME = 'my-java-app'
         APP_PORT = '8089'
@@ -62,7 +62,7 @@
         }
         stage('Login to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-id', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-id-1', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
                 }
             }
