@@ -85,8 +85,7 @@
         }
         aborted {
              echo 'Build was aborted!'
-             sh 'cd java_dropwizard
-          && killall java || true'  // Clean stuck processes
+             sh 'cd java_dropwizard && killall java || true'  // Clean stuck processes
        }
     }
 }
