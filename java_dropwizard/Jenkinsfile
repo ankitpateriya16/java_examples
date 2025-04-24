@@ -12,7 +12,7 @@
         DOCKER_IMAGE = 'ankit9977/my-java-dropwizaed'
         IMAGE_TAG = "${BUILD_NUMBER}"
         CONTAINER_NAME = 'my-java-dropwizaed'
-        APP_PORT = '8089'
+        APP_PORT = '8084'
     }
 
     stages {
