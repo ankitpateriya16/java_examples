@@ -28,7 +28,7 @@ public class JavaDropwizard {
 
 
       // Expose Prometheus metrics.
-      Server server = new Server(1234);
+      Server server = new Server(7000);
       ServletContextHandler context = new ServletContextHandler();
       context.setContextPath("/");
       server.setHandler(context);
