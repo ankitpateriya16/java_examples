@@ -1,0 +1,81 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'mvn' 
+    }
+    options {
+    timeout(time: 3, unit: 'MINUTES')  // Auto-abort after 15 min
+    }
+    environment {
+        GIT_REPO = 'https://github.com/ankitpateriya16/java_examples.git'
+        DOCKER_IMAGE = 'ankit9977/my-java-dropwizard'
+        APP_PORT = '8084'
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                echo '🔄 Cloning GitHub repository...'
+                git url: "${env.GIT_REPO}", branch: 'master'
+            }
+        }
+        stage('Build with Maven') {
+            steps {
+                echo '🔧 Building the Java application...'
+                sh 'cd java_dropwizard && mvn clean compile'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                echo '🧪 Running tests...'
+                sh 'cd java_dropwizard && mvn test'
+            }
+        }
+
+        stage('Package and Build Docker Image') {
+            steps {
+                echo '🐳 Building Docker image...'
+                sh 'cd java_dropwizard && mvn package -DskipTests'
+                sh "cd java_dropwizard && docker build -t ${DOCKER_IMAGE} ."
+            }
+        }
+          stage('Run Docker Container') {
+            steps {
+                echo '🚀 Running Docker container...'
+                // Stop old container if running
+                sh 'cd java_dropwizard && docker rm -f my-java-http || true'
+                // Run new one
+                sh "cd java_dropwizard && docker run -d --name my-java-http -p ${APP_PORT}:7000 ${DOCKER_IMAGE}"
+            }
+        }
+          stage('Login to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-id', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                }
+            }
+        }
+
+        stage('Push Image') {
+            steps {
+                sh "cd java_dropwizard && docker push ${DOCKER_IMAGE}"
+            }
+        }
+
+    }
+
+    post {
+        success {
+            echo '✅ Pipeline completed successfully.'
+        }
+        failure {
+            echo '❌ Pipeline failed.'
+        }
+        aborted {
+             echo 'Build was aborted!'
+             sh 'cd java_dropwizard && killall java || true'  // Clean stuck processes
+       }
+    }
+}
