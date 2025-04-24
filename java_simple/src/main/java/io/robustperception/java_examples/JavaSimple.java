@@ -22,7 +22,7 @@ public class JavaSimple {
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
         throws ServletException, IOException {
-      resp.getWriter().println("Hello World!");
+      resp.getWriter().println("Hello World! this is version 2 run by the ankit");
       // Increment the number of requests.
       requests.inc();
     }
