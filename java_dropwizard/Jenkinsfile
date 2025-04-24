@@ -57,7 +57,7 @@
 
         stage('Run Docker Container') {
             steps {
-                sh "cd java_dropwizard && docker run -d --name $CONTAINER_NAME -p ${APP_PORT}:1234 ${DOCKER_IMAGE}:$IMAGE_TAG"
+                sh "cd java_dropwizard && docker run -d --name $CONTAINER_NAME -p ${APP_PORT}:7000 ${DOCKER_IMAGE}:$IMAGE_TAG"
             }
         }
         stage('Login to Docker Hub') {
