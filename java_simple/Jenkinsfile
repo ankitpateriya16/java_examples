@@ -71,13 +71,6 @@
             }
         }
 
-      stage('Login to ECR') {
-            steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
-                    sh 'sudo aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com'
-                }
-            }
-        }
         stage('Push Image') {
             steps {
                 sh "cd java_simple && docker push ${DOCKER_IMAGE}:$IMAGE_TAG"
