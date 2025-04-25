@@ -16,7 +16,7 @@
         AWS_REGION = 'us-east-1'
         ECR_REPO_NAME = 'b-safe/jenkins'
         AWS_ACCOUNT_ID = '346067777770'
-       SONARQUBE = 'sonarqube'  // Name of your SonarQube server configuration in Jenkins
+       SONARQUBE = 'SonarQube Scanner'  // Name of your SonarQube server configuration in Jenkins
        SONARQUBE_SCANNER_HOME = tool name: 'SonarQube Scanner', type: 'ToolType'  // SonarQube Scanner tool
     }
 
