@@ -13,6 +13,10 @@
         IMAGE_TAG = "${BUILD_NUMBER}"
         CONTAINER_NAME = 'my-java-app'
         APP_PORT = '8089'
+        AWS_REGION = 'us-east-1'
+        ECR_REPO_NAME = 'b-safe/jenkins'
+        IMAGE_TAG = 'latest'
+        AWS_ACCOUNT_ID = '346067777770'
     }
 
     stages {
@@ -62,12 +66,22 @@
         }
         stage('Login to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-id-1', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-id', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
                 }
             }
         }
 
+      stage('Login to ECR') {
+            steps {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
+                    sh """
+                    aws ecr get-login-password --region $AWS_REGION | \
+docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+                    """
+                }
+            }
+        }
         stage('Push Image') {
             steps {
                 sh "cd java_simple && docker push ${DOCKER_IMAGE}:$IMAGE_TAG"
