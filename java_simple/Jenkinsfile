@@ -15,7 +15,6 @@
         APP_PORT = '8089'
         AWS_REGION = 'us-east-1'
         ECR_REPO_NAME = 'b-safe/jenkins'
-        IMAGE_TAG = 'latest'
         AWS_ACCOUNT_ID = '346067777770'
     }
 
