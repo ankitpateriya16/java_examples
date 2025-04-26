@@ -48,7 +48,6 @@
                     }
                 }
             }
-        }
 
         stage('Run Tests') {
             steps {
