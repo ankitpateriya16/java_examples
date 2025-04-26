@@ -41,7 +41,7 @@
                             sonar-scanner \
                                 -Dsonar.projectKey=b-safe \
                                 -Dsonar.sources=. \
-                                -Dsonar.host.url=http://107.21.28.4:9000/ \
+                                -Dsonar.host.url=http://34.227.48.189:9000/ \
                                 -Dsonar.login=$SONAR_AUTH_TOKEN
                         """
                     }
