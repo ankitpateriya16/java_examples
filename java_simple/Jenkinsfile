@@ -15,9 +15,7 @@
         AWS_REGION = 'us-east-1'
         ECR_REPO_NAME = 'b-safe/jenkins'
         AWS_ACCOUNT_ID = '346067777770'
-       SONARQUBE = 'SonarQube'  // Name of your SonarQube server configuration in Jenkins
-       SONARQUBE_SCANNER_HOME = tool name: 'SonarScanner', type: 'ToolType'  // SonarQube Scanner tool
-    }
+     }
 
     stages {
         stage('Clone Repository') {
@@ -36,14 +34,17 @@
             steps {
                 script {
                     // Run SonarQube analysis after the build is successful
-                    withSonarQubeEnv(SONARQUBE) {
-                        sh '''#!/bin/bash
+                     withSonarQubeEnv("${env.SONARQUBE}") {
+                        def scannerHome = tool name: 'SonarScanner'  // Correct way
+                        sh """#!/bin/bash
+                            export PATH=${scannerHome}/bin:\$PATH
                             sonar-scanner \
-                            -Dsonar.projectKey=b-safe \
-                            -Dsonar.sources=. \
--Dsonar.host.url=http://http://18.207.150.31:9000/ \
-                            -Dsonar.login=$SONAR_AUTH_TOKEN
-                        '''
+                                -Dsonar.projectKey=b-safe \
+                                -Dsonar.sources=. \
+                                -Dsonar.host.url=http://107.21.28.4:9000/ \
+                                -Dsonar.login=$SONAR_AUTH_TOKEN
+                        """
+                    }
                     }
                 }
             }
