@@ -13,7 +13,7 @@
         CONTAINER_NAME = 'my-java-app'
         APP_PORT = '8089'
         AWS_REGION = 'us-east-1'
-        ECR_REPO_NAME = 'b-safe/jenkins'
+        ECR_REPO_NAME = 'b-safe/'
         AWS_ACCOUNT_ID = '346067777770'
      }
 
