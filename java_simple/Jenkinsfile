@@ -2,8 +2,7 @@
     agent { label 'build' }
    tools {
         maven 'mvn' 
-        sonarQube 'SonarScanner'
-    }
+        }
     options {
     timeout(time: 3, unit: 'MINUTES')  // Auto-abort after 15 min
     }
