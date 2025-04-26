@@ -34,7 +34,7 @@
             steps {
                 script {
                     // Run SonarQube analysis after the build is successful
-                     withSonarQubeEnv("${env.SONARQUBE}") {
+                     withSonarQubeEnv("SonarScanner") {
                         def scannerHome = tool name: 'SonarScanner'  // Correct way
                         sh """#!/bin/bash
                             export PATH=${scannerHome}/bin:\$PATH
@@ -44,7 +44,7 @@
                                 -Dsonar.host.url=http://34.227.48.189:9000/ \
                                 -Dsonar.login=$SONAR_AUTH_TOKEN
                         """
-                    }
+                       }
                     }
                 }
             }
