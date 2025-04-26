@@ -2,6 +2,7 @@
     agent { label 'build' }
    tools {
         maven 'mvn' 
+        sonarQube 'SonarScanner
     }
     options {
     timeout(time: 3, unit: 'MINUTES')  // Auto-abort after 15 min
@@ -16,7 +17,7 @@
         ECR_REPO_NAME = 'b-safe/jenkins'
         AWS_ACCOUNT_ID = '346067777770'
        SONARQUBE = 'SonarQube'  // Name of your SonarQube server configuration in Jenkins
-       SONARQUBE_SCANNER_HOME = tool name: 'SonarQube Scanner', type: 'ToolType'  // SonarQube Scanner tool
+       SONARQUBE_SCANNER_HOME = tool name: 'SonarScanner', type: 'ToolType'  // SonarQube Scanner tool
     }
 
     stages {
